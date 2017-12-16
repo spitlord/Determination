@@ -15,10 +15,13 @@ import javafx.scene.shape.Rectangle;
 
  public class Board {
      
-     public final static int COLUMNS = 150;
-     public final static int ROWS = 150;
-     public final static int WIDTH = 5;
-     public final static int HEIGHT = 5;
+     ControlPanel controls;
+     
+     public final static int COLUMNS = 70;
+     public final static int ROWS = 70;
+     public final static int WIDTH = 10;
+     public final static int HEIGHT = 10;
+     public int invertRange;
      public double mouseX, mouseY;
      
      
@@ -43,6 +46,10 @@ import javafx.scene.shape.Rectangle;
          }
          
          
+         controls = new ControlPanel(this);
+         //
+         invertRange = 0;
+         
          // press space;
          
          game.getScene().setOnKeyPressed(e -> {
@@ -50,7 +57,7 @@ import javafx.scene.shape.Rectangle;
                  
                 int column = (int)(mouseX / WIDTH);
                 int row = (int)(mouseY / HEIGHT);
-                invertSquare(15, row, column);
+                invertSquare(invertRange, row, column);
                 e.consume();
              }
              else if (e.getCode() == KeyCode.A) {
@@ -71,7 +78,7 @@ import javafx.scene.shape.Rectangle;
                 double mY = e.getY();
                 int column = (int)(mX / WIDTH);
                 int row = (int)(mY / HEIGHT);
-                invertSquare(15, row, column);
+                invertSquare(invertRange, row, column);
                 e.consume();
               }
                
@@ -235,7 +242,16 @@ import javafx.scene.shape.Rectangle;
                
            }
        }
-       
+
+    public int getInvertRange() {
+        return invertRange;
+    }
+
+    public void setInvertRange(int invertRange) {
+        this.invertRange = invertRange;
+    }
+    
+    
        
       
  
