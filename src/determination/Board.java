@@ -47,7 +47,7 @@ import javafx.scene.shape.Rectangle;
         this.game = game;
         
         // initialize color scheme
-        setColorScheme("original");
+        setColorScheme("vapor");
       
         blocks = new Block[ROWS][COLUMNS];
         initBlocks();
@@ -63,8 +63,6 @@ import javafx.scene.shape.Rectangle;
              }  
          }
          
-         
-         controls = new ControlPanel(this);
          //
          invertRange = 0;
          
@@ -284,6 +282,12 @@ import javafx.scene.shape.Rectangle;
     public int getInvertRange() {
         return invertRange;
     }
+
+    public Game getGame() {
+        return game;
+    }
+    
+    
     
     
     

@@ -33,9 +33,19 @@ public class ColorSchemes {
         // defaultScheme.add(Color.rgb(0, 0, 255));
        // defaultScheme.add(Color.BLUE);
        // defaultScheme.add(Color.PINK);
-       // defaultScheme.add(Color.CYAN);
+        defaultScheme.add(Color.CYAN);
        // defaultScheme.add(Color.RED);
         colorSchemes.put("original", defaultScheme);
+        ArrayList vapor = new ArrayList();
+        vapor.add(Color.PINK);
+        vapor.add(Color.CYAN);
+        vapor.add(Color.VIOLET);
+        vapor.add(Color.WHITE);
+        vapor.add(Color.BLUE);
+        vapor.add(Color.DARKORCHID);
+        vapor.add(Color.SKYBLUE);
+        vapor.add(Color.SALMON);
+        colorSchemes.put("vapor", vapor);
     }
     
     public ArrayList getScheme (String name) {

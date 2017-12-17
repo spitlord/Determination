@@ -35,6 +35,7 @@ public class Game extends Application {
     Board mainBoard;
     GridPane grid;
     Scene scene;
+    Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -44,6 +45,8 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage) {
         
+        this.primaryStage = primaryStage;
+        
       
        
         grid = new GridPane();
@@ -52,26 +55,33 @@ public class Game extends Application {
 
         scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
         scene.setCursor(Cursor.HAND);
-        
-        
-        
         mainBoard = new Board(this);
-       
-        
-       
         primaryStage.setScene(scene);
         primaryStage.show();
+        ControlPanel control = new ControlPanel(mainBoard);
+        
+        
+       
+        
+       
+
        
 } 
 
     public Scene getScene() {
         return scene;
     }
+    
+    public Stage getStage() {
+        return primaryStage;
+    }
 
     public GridPane getGrid() {
         return grid;
     }
+
     
+   
     
     
     

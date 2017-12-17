@@ -54,9 +54,12 @@ public class ControlPanel {
         
         // set up the window
         
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 200, 50);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
+        stage.setX(board.getGame().getStage().getX() + board.getGame().getStage().getWidth());
+        stage.setY(board.getGame().getStage().getY());
         stage.show();
         
     }
