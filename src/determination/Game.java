@@ -24,7 +24,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -32,15 +31,16 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 public class Game extends Application {
-    final Board[] rec = new Board[8];
-    public static List<Circle> circles = new ArrayList<Circle>();
+        
+    Board mainBoard;
+    GridPane grid;
+    Scene scene;
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    GridPane grid;
-    Scene scene;
+   
     @Override
     public void start(Stage primaryStage) {
         
@@ -52,9 +52,10 @@ public class Game extends Application {
 
         scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
         scene.setCursor(Cursor.HAND);
-
         
-        Board array = new Board(this);
+        
+        
+        mainBoard = new Board(this);
        
         
        

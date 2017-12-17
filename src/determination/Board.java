@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package determination;
 
+import java.util.ArrayList;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.input.KeyCode;
@@ -13,14 +16,25 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+// In principle, there are two ways of operationg a board
+// One of them, is to have a checkerboard, where every element
+// is movable and independant
+// Second, is to have a board of lightbulbs.
+// Lightbulbs cannot be moved, but they can change states;
+
+
+
  public class Board {
+     
+     
      
      ControlPanel controls;
      
-     public final static int COLUMNS = 70;
-     public final static int ROWS = 70;
-     public final static int WIDTH = 10;
-     public final static int HEIGHT = 10;
+     public final static int COLUMNS = 140;
+     public final static int ROWS = 140;
+     public final static int WIDTH = 5;
+     public final static int HEIGHT = 5;
+     public ArrayList<Color> colorScheme;
      public int invertRange;
      public double mouseX, mouseY;
      
@@ -31,15 +45,19 @@ import javafx.scene.shape.Rectangle;
      
      public Board(Game game) {
         this.game = game;
+        
+        // initialize color scheme
+        setColorScheme("original");
+      
         blocks = new Block[ROWS][COLUMNS];
-        initB(game);
+        initBlocks();
      }
      
      
-     void initB(Game game) {
+     void initBlocks() {
          for (int i = 0; i < ROWS; i++) {
              for (int j = 0; j < COLUMNS; j++) {
-                 blocks[i][j] = new Block();
+                 blocks[i][j] = new Block(this);
                  blocks[i][j].rec = new Rectangle(WIDTH, HEIGHT);
                  game.getGrid().add(blocks[i][j].rec, j, i);
              }  
@@ -95,9 +113,17 @@ import javafx.scene.shape.Rectangle;
 //              
 //          }
 //          );
-           
-           
+
      }
+     
+     public void setColorScheme(String name) {
+        ColorSchemes cs = new ColorSchemes();
+        colorScheme = cs.getScheme(name);
+        
+        // change the total number of states for the blocks
+        Block.numberOfStates = colorScheme.size();
+     }
+     
      
      public void clear() {
          for (int i = 0; i < COLUMNS; i++) {
@@ -232,6 +258,9 @@ import javafx.scene.shape.Rectangle;
 //           
 //       }
        
+       
+       // later considering modular support
+       //
        public void invertSquare(int dimention, int row, int column)  {
            for (int i = column - dimention; i <= column + dimention; i++) {
                for (int j = row - dimention; j <= row + dimention; j++) {
@@ -243,13 +272,33 @@ import javafx.scene.shape.Rectangle;
            }
        }
 
+       
+       // getters
+
+    public ArrayList<Color> getColorScheme() {
+        return colorScheme;
+    }
+    
+       
+       
     public int getInvertRange() {
         return invertRange;
     }
+    
+    
+    
+    
+    // setters
 
     public void setInvertRange(int invertRange) {
         this.invertRange = invertRange;
     }
+
+   
+    
+    
+    
+    
     
     
        

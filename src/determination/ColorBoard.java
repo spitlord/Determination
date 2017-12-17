@@ -5,25 +5,23 @@
  */
 package determination;
 
-import javafx.scene.paint.Color;
-
 /**
  *
  * @author XDXD
  */
-public class BlockState {
-   
-    String name;
-    Color color;
 
-    public BlockState(String name, Color color) {
-        this.name = name;
-        this.color = color;
+
+// rather have multiple different boards
+
+public class ColorBoard extends Board  {
+    
+    public ColorBoard(Game game) {
+        super(game);
     }
     
     
-    
-    
-    
-    
 }
+
+
+
+
