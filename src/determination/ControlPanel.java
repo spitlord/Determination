@@ -5,6 +5,9 @@
  */
 package determination;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
@@ -33,13 +36,12 @@ public class ControlPanel {
         
         Slider invertSquareDimention = new Slider();
         invertSquareDimention.setMin(0);
-        invertSquareDimention.setMax(25);
-        invertSquareDimention.setBlockIncrement(1);
-        invertSquareDimention.setMajorTickUnit(1);
+        invertSquareDimention.setMax(Math.min(Board.COLUMNS, Board.ROWS));
+        invertSquareDimention.setBlockIncrement(2);
+        invertSquareDimention.setMajorTickUnit(2);
         invertSquareDimention.setShowTickMarks(true);
         invertSquareDimention.setMinorTickCount(0);
-        invertSquareDimention.setSnapToTicks(true);
-        
+        invertSquareDimention.setSnapToTicks(true); 
         
         invertSquareDimention.setOnMouseClicked(e -> {
             board.setInvertRange((int) invertSquareDimention.getValue());
