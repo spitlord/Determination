@@ -25,18 +25,19 @@ import javafx.scene.shape.Rectangle;
 
 
  public class Board {
+      
      
+     public static ArrayList<Color> colorScheme;
      
-     
+   
      ControlPanel controls;
      
-     public final static int COLUMNS = 140;
-     public final static int ROWS = 140;
-     public final static int WIDTH = 5;
-     public final static int HEIGHT = 5;
-     public ArrayList<Color> colorScheme;
-     public int invertRange;
-     public double mouseX, mouseY;
+     public final static int COLUMNS = 50;
+     public final static int ROWS = 50;
+     public final static int WIDTH = 10;
+     public final static int HEIGHT = 10;
+
+  
      
      
      Block[][] blocks;
@@ -44,6 +45,7 @@ import javafx.scene.shape.Rectangle;
  
      
      public Board(Game game) {
+      
         this.game = game;
         
         // initialize color scheme
@@ -55,68 +57,26 @@ import javafx.scene.shape.Rectangle;
      
      
      void initBlocks() {
-         for (int i = 0; i < ROWS; i++) {
-             for (int j = 0; j < COLUMNS; j++) {
-                 blocks[i][j] = new Block(this);
-                 blocks[i][j].rec = new Rectangle(WIDTH, HEIGHT);
-                 game.getGrid().add(blocks[i][j].rec, j, i);
+         for (int y = 0; y < ROWS; y++) {
+             for (int x = 0; x < COLUMNS; x++) {
+                 blocks[y][x] = new Block();
+                 blocks[y][x].rec = new Rectangle(WIDTH, HEIGHT);
+                 game.getGrid().add(blocks[y][x].rec, x, y);
              }  
          }
-         
-         //
-         invertRange = 0;
-         
-         // press space;
-         
-         game.getScene().setOnKeyPressed(e -> {
-             if (e.getCode() == KeyCode.SPACE) {
-                 
-                int column = (int)(mouseX / WIDTH);
-                int row = (int)(mouseY / HEIGHT);
-                invertSquare(invertRange, row, column);
-                e.consume();
-             }
-             else if (e.getCode() == KeyCode.A) {
-                 clear();
-             }
-             
-         });
-         
-          game.getScene().setOnMouseMoved(e -> {
-               mouseX = e.getX();
-               mouseY = e.getY();
-               
-          } );
-         
-          game.getScene().setOnMouseClicked(e -> {
-              if (e.getTarget() instanceof Rectangle) {
-                double mX = e.getX();
-                double mY = e.getY();
-                int column = (int)(mX / WIDTH);
-                int row = (int)(mY / HEIGHT);
-                invertSquare(invertRange, row, column);
-                e.consume();
-              }
-               
-          }
-          );
-                  
-//           game.getScene().setOnKeyPressed(e -> {
-//              if (e.getCode() == KeyCode.A) moveAllRight();
-//              else if (e.getCode() == KeyCode.W) eachBlockDown();
-//              else if (e.getCode() == KeyCode.S) clear();
-//              else if (e.getCode() == KeyCode.SPACE) {
-//                closer2();
-//              }
-//              
-//          }
-//          );
-
      }
+     
+     
+     
+     
+     
+     
+     
+     ////  replace color X with color Y
      
      public void setColorScheme(String name) {
         ColorSchemes cs = new ColorSchemes();
-        colorScheme = cs.getScheme(name);
+        Board.colorScheme = cs.getScheme(name);
         
         // change the total number of states for the blocks
         Block.numberOfStates = colorScheme.size();
@@ -124,9 +84,9 @@ import javafx.scene.shape.Rectangle;
      
      
      public void clear() {
-         for (int i = 0; i < COLUMNS; i++) {
-             for (int j = 0; j < ROWS; j++) {
-                 blocks[j][i].turnOff();
+         for (int y = 0; y < COLUMNS; y++) {
+             for (int x = 0; x < ROWS; x++) {
+                 blocks[x][y].turnOff();
              } 
          }
      }
@@ -238,37 +198,48 @@ import javafx.scene.shape.Rectangle;
      }
        
        
-//       public void invertSquare(int dimention, int row, int column) {
-//           
-//           int leftCostraint = (column > dimention)? 0 : dimention - column;
-//           int rightCostraint = (column + dimention < COLUMNS) ?
-//                   0 : column + dimention - (COLUMNS - 1);
-//           int topCostraint = (row > dimention) ?  0 : dimention - row;
-//           int bottomCostraint = (row + dimention < ROWS) ?
-//                   0 : row - (ROWS - 1);
-//           
-//           
-//           for (int i = column - dimention + leftCostraint; i < column + dimention - rightCostraint; i++) {
-//               for (int j = row - dimention + topCostraint; j < row + dimention - bottomCostraint; j++) {
-//                   blocks[i][j].switchColor();
-//               }    
-//           }
-//           
-//       }
-       
        
        // later considering modular support
        //
-       public void invertSquare(int dimention, int row, int column)  {
-           for (int i = column - dimention; i <= column + dimention; i++) {
-               for (int j = row - dimention; j <= row + dimention; j++) {
-                   try {
-                       blocks[j][i].switchColor();
-                   } catch (ArrayIndexOutOfBoundsException ex) {}
-               }
-               
+       public void invertSquare(int dimention, int row, int column, boolean modular)  {
+    
+           if (modular) {
+                for (int y = row - dimention; y <= row + dimention; y++) {
+                    for (int x = column - dimention; x <= column + dimention; x++) {
+                        if (y < 0){
+                            if (x < 0) {
+                                blocks [Board.ROWS + y][Board.COLUMNS + x].switchColor();  
+                            }
+                            else {
+                                blocks [Board.ROWS + y][x % Board.COLUMNS].switchColor();  
+                            }
+                        }
+                        else {
+                            if (x < 0) {
+                                 blocks[y % Board.ROWS ][Board.COLUMNS + x].switchColor();  
+                            }
+                            else {
+                                 blocks[y % Board.ROWS ][x % Board.COLUMNS].switchColor();  
+                            }
+                        }
+                    }
+               } 
            }
+           else {
+               int upperConstraint, lowerConstraint, leftConstraint, rightConsraint;
+               lowerConstraint = (row - dimention > 0) ? row - dimention : 0;
+               upperConstraint = (row + dimention < Board.ROWS)? row + dimention : Board.ROWS - 1;
+               leftConstraint  = (column - dimention > 0) ? column - dimention : 0;
+               rightConsraint  = (column + dimention < Board.COLUMNS) ? column + dimention : Board.COLUMNS - 1;
+               
+               for (int y = lowerConstraint; y <= upperConstraint; y++) {
+                    for (int x = leftConstraint; x <= rightConsraint; x++) {
+                            blocks[y][x].switchColor();
+                    }
+               }
+            }
        }
+       
 
        
        // getters
@@ -277,12 +248,6 @@ import javafx.scene.shape.Rectangle;
         return colorScheme;
     }
     
-       
-       
-    public int getInvertRange() {
-        return invertRange;
-    }
-
     public Game getGame() {
         return game;
     }
@@ -294,9 +259,6 @@ import javafx.scene.shape.Rectangle;
     
     // setters
 
-    public void setInvertRange(int invertRange) {
-        this.invertRange = invertRange;
-    }
 
    
     

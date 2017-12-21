@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -47,19 +48,24 @@ public class Game extends Application {
         
         this.primaryStage = primaryStage;
         
-      
+
+        
        
         grid = new GridPane();
         grid.setHgap(0);
         grid.setVgap(0);
-
-        scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
-        scene.setCursor(Cursor.HAND);
-        mainBoard = new Board(this);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        ControlPanel control = new ControlPanel(mainBoard);
+        grid.layoutXProperty().bind(new SimpleDoubleProperty(10));
+        grid.layoutYProperty().bind(new SimpleDoubleProperty(10));
+       
         
+        
+        mainBoard = new Board(this);
+        scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
+        primaryStage.setScene(scene);
+        primaryStage.show(); 
+        
+        
+        ControlPanel controls = new ControlPanel(mainBoard);
         
        
         

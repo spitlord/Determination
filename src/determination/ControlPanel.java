@@ -5,12 +5,21 @@
  */
 package determination;
 
+import static determination.Board.HEIGHT;
+import static determination.Board.WIDTH;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -19,8 +28,14 @@ import javafx.stage.Stage;
  */
 public class ControlPanel {
     Board board;
+    public double mouseX, mouseY;
+    public int invertRange;
+    
+    Button modularInvertButton;
+    boolean modularInvert;
 
     public ControlPanel(Board board) {
+        invertRange = 0;
         this.board = board;
         initPanel();
     }
@@ -31,6 +46,7 @@ public class ControlPanel {
         // container for all the controls
         
         VBox root = new VBox();
+        
         
         // invert square function slider
         
@@ -44,19 +60,79 @@ public class ControlPanel {
         invertSquareDimention.setSnapToTicks(true); 
         
         invertSquareDimention.setOnMouseClicked(e -> {
-            board.setInvertRange((int) invertSquareDimention.getValue());
+            invertRange = ((int) invertSquareDimention.getValue());
         });
         invertSquareDimention.setOnMouseDragged(e -> {
-            board.setInvertRange((int) invertSquareDimention.getValue());
+            invertRange = ((int) invertSquareDimention.getValue());
         });
         root.getChildren().add(invertSquareDimention);
+        
+        
+        // Working with // Color scheme 
+        ComboBox<Color> colorSchemeBox  = new ComboBox();
+        ObservableList<Color> colors = FXCollections.observableArrayList(Board.colorScheme);
+        colorSchemeBox.setItems(colors);
+        root.getChildren().add(colorSchemeBox);
+        
+        
+        
+        modularInvert = false;
+        modularInvertButton = new Button();
+        modularInvertButton.setOnAction(e -> {
+            modularInvert = !modularInvert;
+        });
+        root.getChildren().add(modularInvertButton);
+        
+        
+            board.game.getScene().setOnKeyPressed(e -> {
+             if (e.getCode() == KeyCode.SPACE) {
+                 
+                int column = (int)(mouseX / WIDTH);
+                int row = (int)(mouseY / HEIGHT);
+                board.invertSquare(invertRange, row, column, modularInvert);
+                e.consume();
+             }
+             else if (e.getCode() == KeyCode.A) {
+                 board.clear();
+             }
+             
+         });
+         
+          board.game.getScene().setOnMouseMoved(e -> {
+               mouseX = e.getX();
+               mouseY = e.getY();
+               
+          } );
+         
+          board.game.getScene().setOnMouseClicked(e -> {
+              if (e.getTarget() instanceof Rectangle) {
+                double mX = e.getX();
+                double mY = e.getY();
+                int column = (int)(mX / WIDTH);
+                int row = (int)(mY / HEIGHT);
+                board.invertSquare(invertRange, row, column, modularInvert);
+                e.consume();
+              }
+               
+          }
+          );
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
         
         // set up the window
         
-        Scene scene = new Scene(root, 200, 50);
+        Scene scene = new Scene(root, 200, 100);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);

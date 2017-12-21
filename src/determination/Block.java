@@ -14,9 +14,9 @@ public class Block {
     
     
     
-    
-    public Board board;
-    public boolean on;
+    /// delete both of those references,
+    /// they are not needed
+            
     
     
     /// Planning to rewrite innate Shape and Rectangle class
@@ -25,19 +25,18 @@ public class Block {
     /// the program slows down.
     /// Rectagle here does not need certain things like
     /// strokeWidth, or binding properties, and other stuff
-    public Rectangle rec;
-
+    public Rectangle rec; 
+    public int stateIndex;
     
     // total number of colors in a given color scheme
     public static int numberOfStates;
-    public int stateIndex;
+    
 
     /// have a substates variable vector that will accomodate for different games?
     // so that only few colors could be switched at a time, for instance
-    public Block(Board board) {
+    public Block() {
         
-        this.board = board;
-        numberOfStates = board.getColorScheme().size();
+        numberOfStates = Board.colorScheme.size();
         stateIndex = 0;
         
     }
@@ -60,22 +59,30 @@ public class Block {
 
     
     public void turnOff() {
-        on = false;
         setState(0);
     }
     
      public void turnOn() {
-        on = true;
         setState(1);
     }
 
     public boolean isOn() {
-        return on;
+        return stateIndex == 0; 
+    }
+    
+    public boolean isOff() {
+        return stateIndex != 0; 
     }
     
    public void setState(int stateIndex) {
        this.stateIndex = stateIndex;
-       rec.setFill(board.getColorScheme().get(stateIndex));
+       rec.setFill(Board.colorScheme.get(stateIndex));
+   }
+   
+   
+   public void updateColorScheme(){
+       // delete board reference
+       
    }
 
 
