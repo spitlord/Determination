@@ -7,14 +7,20 @@
 
 package determination;
 
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventType;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javax.imageio.ImageIO;
 
 // In principle, there are two ways of operationg a board
 // One of them, is to have a checkerboard, where every element
@@ -28,20 +34,21 @@ import javafx.scene.shape.Rectangle;
       
      
      public static ArrayList<Color> colorScheme;
+     public String  colorSchemeName = "original";
      
    
      ControlPanel controls;
      
-     public final static int COLUMNS = 50;
-     public final static int ROWS = 50;
-     public final static int WIDTH = 10;
-     public final static int HEIGHT = 10;
+     public final static int COLUMNS = 4;
+     public final static int ROWS = 4;
+     public final static int WIDTH = 40;
+     public final static int HEIGHT = 40;
 
   
      
      
-     Block[][] blocks;
      Game game;
+     Block[][] blocks;
  
      
      public Board(Game game) {
@@ -49,14 +56,14 @@ import javafx.scene.shape.Rectangle;
         this.game = game;
         
         // initialize color scheme
-        setColorScheme("vapor");
+        setColorScheme(colorSchemeName);
       
         blocks = new Block[ROWS][COLUMNS];
-        initBlocks();
+        initBoard();
      }
      
      
-     void initBlocks() {
+     void initBoard() {
          for (int y = 0; y < ROWS; y++) {
              for (int x = 0; x < COLUMNS; x++) {
                  blocks[y][x] = new Block();
@@ -199,8 +206,8 @@ import javafx.scene.shape.Rectangle;
        
        
        
-       // later considering modular support
-       //
+       
+      
        public void invertSquare(int dimention, int row, int column, boolean modular)  {
     
            if (modular) {
@@ -240,7 +247,53 @@ import javafx.scene.shape.Rectangle;
             }
        }
        
+       
+       
+       public void replaceColor(int colorIndex, int anotherColorIndex) {
+       }
 
+       
+       public void moveTo(int colorIndex, int anotherColorIndex) {
+       }
+       
+       
+       public void oddEvenGameStep() {
+           int onNeighbours;
+           boolean[][] onOff = new boolean[ROWS][COLUMNS];
+           for (int y = 1; y < ROWS - 1; y++) {
+             for (int x = 1; x < COLUMNS - 1; x++) {
+                 onNeighbours = 0;
+                 
+                if (blocks[y-1][x-1].isOn()) onNeighbours++;
+                if (blocks[y-1][x].isOn()) onNeighbours++;
+                if (blocks[y-1][x+1].isOn()) onNeighbours++;
+                if (blocks[y][x-1].isOn()) onNeighbours++;
+                if (blocks[y][x+1].isOn()) onNeighbours++;
+                if (blocks[y+1][x-1].isOn()) onNeighbours++;
+                if (blocks[y+1][x].isOn()) onNeighbours++;
+                if (blocks[y+1][x+1].isOn()) onNeighbours++;
+                // mod 5 is interesting!!
+                if (onNeighbours%5 == 0) {
+                    onOff[y][x] = false;
+                }
+                else {
+                    onOff[y][x] = true;
+                }
+             }  
+           }
+           
+           for (int y = 1; y < ROWS - 1; y++) {
+             for (int x = 1; x < COLUMNS - 1; x++) {
+                 if (onOff[y][x]) {
+                     blocks[y][x].turnOn();
+                 }
+                 else {
+                     blocks[y][x].turnOff();
+                 }   
+             }
+           }
+           
+       }
        
        // getters
 
@@ -262,6 +315,23 @@ import javafx.scene.shape.Rectangle;
 
    
     
+    
+    
+    
+    
+    // snapshot
+    public void snap(int i){
+    try {
+        File f = new File("out/Tanya"+ i + ".png");
+            //Pad the capture area
+            WritableImage writableImage = new WritableImage((int)game.grid.getWidth()+ 20,
+                    (int)game.grid.getWidth() + 20);
+            game.grid.snapshot(null, writableImage);
+            RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+            //Write the snapshot to the chosen file
+            ImageIO.write(renderedImage, "png", f);
+        } catch (IOException ex) {}
+    }
     
     
     

@@ -17,6 +17,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
@@ -32,7 +33,8 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 
 public class Game extends Application {
-        
+    InvertibleBoard secondaryBoard;    
+    ScrollPane scroll;
     Board mainBoard;
     GridPane grid;
     Scene scene;
@@ -49,23 +51,32 @@ public class Game extends Application {
         this.primaryStage = primaryStage;
         
 
-        
+        scroll  = new ScrollPane();
        
         grid = new GridPane();
         grid.setHgap(0);
         grid.setVgap(0);
-        grid.layoutXProperty().bind(new SimpleDoubleProperty(10));
-        grid.layoutYProperty().bind(new SimpleDoubleProperty(10));
+        
+        scroll.setContent(grid);
        
+        int x = 0 ;
+        switch (x) {
+            case 1:
+                break;
+            default:
+        }
         
-        
-        mainBoard = new Board(this);
-        scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
+        // mainBoard = new Board(this);
+       
+        secondaryBoard = new InvertibleBoard(this);
+       
+        scene = new Scene(scroll, grid.getPrefWidth(), grid.getPrefHeight());
         primaryStage.setScene(scene);
         primaryStage.show(); 
         
         
-        ControlPanel controls = new ControlPanel(mainBoard);
+       // ControlPanel controls = new ControlPanel(mainBoard);
+        primaryStage.toFront();
         
        
         
@@ -86,6 +97,12 @@ public class Game extends Application {
         return grid;
     }
 
+    public ScrollPane getScroll() {
+        return scroll;
+    }
+
+    
+    
     
    
     

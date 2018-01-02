@@ -20,7 +20,7 @@ public class ColorSchemes {
     // being able to get them
     // works as a hash table?
 
-    HashMap<String, ArrayList> colorSchemes;
+    public static HashMap<String, ArrayList<Color>> colorSchemes;
 
     public ColorSchemes() {
         colorSchemes = new HashMap();
@@ -46,6 +46,12 @@ public class ColorSchemes {
         vapor.add(Color.SKYBLUE);
         vapor.add(Color.SALMON);
         colorSchemes.put("vapor", vapor);
+        
+         ArrayList mild = new ArrayList();
+        mild.add(Color.BLACK);
+        mild.add(Color.GREY);
+      
+        colorSchemes.put("mild", mild);
     }
     
     public ArrayList getScheme (String name) {
@@ -53,8 +59,19 @@ public class ColorSchemes {
     }
     
     
-    
-    
+    // creates a pallate with a given number of 
+    // 
+    public static ArrayList createGradient(int number) {
+        ArrayList colors = new ArrayList();
+        if (number > 0 ) {
+            for (int i = 0; i < number; i++) {
+                colors.add(Color.hsb(i*360.0/number, 0.5, 1));  
+            }
+            return colors;
+        }
+        else return null;
+      
+    }
     
     
     

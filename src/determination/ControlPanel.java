@@ -5,22 +5,36 @@
  */
 package determination;
 
+import javafx.collections.FXCollections;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.util.Callback;
+import javafx.scene.control.ListView;
 import static determination.Board.HEIGHT;
 import static determination.Board.WIDTH;
+import java.util.ArrayList;
+import java.util.Set;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 
 /**
  *
@@ -30,9 +44,15 @@ public class ControlPanel {
     Board board;
     public double mouseX, mouseY;
     public int invertRange;
+    public int snapCount;
     
     Button modularInvertButton;
     boolean modularInvert;
+    
+    
+    // combo box for picking color;
+    ComboBox<Color> colorSchemeBox; 
+    ObservableList<Color> colors;
 
     public ControlPanel(Board board) {
         invertRange = 0;
@@ -46,6 +66,7 @@ public class ControlPanel {
         // container for all the controls
         
         VBox root = new VBox();
+        snapCount = 0;
         
         
         // invert square function slider
@@ -67,11 +88,60 @@ public class ControlPanel {
         });
         root.getChildren().add(invertSquareDimention);
         
+        // pick a scheme;
+        ComboBox<String> schemesBox  = new ComboBox();
+        schemesBox.setValue("Original");
+        ObservableList<String> schemesBoxSet = FXCollections.observableArrayList(ColorSchemes.colorSchemes.keySet());
+        schemesBox.setItems(schemesBoxSet); 
+        root.getChildren().add(schemesBox);
+        
+        schemesBox.setOnAction(e -> {
+            schemesBox.getValue();
+            board.setColorScheme(schemesBox.getValue());
+            colors = null;
+            colors = FXCollections.observableArrayList(Board.colorScheme);
+            colorSchemeBox.setItems(colors);
+            
+        });
+        
+        
+        //ObservableList<Color> colors = FXCollections.observableArrayList(Board.colorScheme);
+
+        
+        
+        
         
         // Working with // Color scheme 
-        ComboBox<Color> colorSchemeBox  = new ComboBox();
-        ObservableList<Color> colors = FXCollections.observableArrayList(Board.colorScheme);
+        colorSchemeBox  = new ComboBox();
+        colors = FXCollections.observableArrayList(Board.colorScheme);
         colorSchemeBox.setItems(colors);
+        
+        colorSchemeBox.setCellFactory(new Callback<ListView<Color>, ListCell<Color>>() {
+            @Override 
+            public ListCell<Color> call(ListView<Color> p) {
+                return new ListCell<Color>() {
+                    @Override
+                    protected void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                            if (item != null) {
+                                String c = item.toString().substring(2,8);
+                                setStyle("-fx-background-color: #" + c + ";");
+                                setText("");
+                            }
+                    }
+                };
+            }
+        });
+        
+        colorSchemeBox.setOnAction(e -> {
+            try {
+            String c = colorSchemeBox.getValue().toString().substring(2,8);
+            colorSchemeBox.setStyle("-fx-background-color: #" + c + ";");
+            } catch(Exception ex) { // quickfix(??)
+            }
+            
+        });
+
         root.getChildren().add(colorSchemeBox);
         
         
@@ -95,6 +165,13 @@ public class ControlPanel {
              else if (e.getCode() == KeyCode.A) {
                  board.clear();
              }
+             else if (e.getCode() == KeyCode.S) {
+                 board.oddEvenGameStep();
+               //  board.snap(snapCount);
+               //  snapCount++;
+             }
+
+             
              
          });
          
