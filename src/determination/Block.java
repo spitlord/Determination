@@ -8,6 +8,7 @@ package determination;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 
 public class Block {
@@ -36,7 +37,7 @@ public class Block {
     // so that only few colors could be switched at a time, for instance
     public Block() {
         
-        numberOfStates = Board.colorScheme.size();
+        numberOfStates = PlayBoard.colorScheme.size();
         stateIndex = 0;
         
     }
@@ -76,12 +77,19 @@ public class Block {
     
    public void setState(int stateIndex) {
        this.stateIndex = stateIndex;
-       rec.setFill(Board.colorScheme.get(stateIndex));
+       rec.setFill(PlayBoard.colorScheme.get(stateIndex));
    }
    
    
    public void updateColorScheme(){
        // delete board reference
+       
+   }
+   
+   public void highlight() {
+       rec.setStrokeType(StrokeType.INSIDE);
+       rec.setStroke(Color.BLACK);
+       rec.setStrokeWidth(2);
        
    }
 

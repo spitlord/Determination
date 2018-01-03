@@ -11,8 +11,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.util.Callback;
 import javafx.scene.control.ListView;
-import static determination.Board.HEIGHT;
-import static determination.Board.WIDTH;
+import static determination.PlayBoard.HEIGHT;
+import static determination.PlayBoard.WIDTH;
 import java.util.ArrayList;
 import java.util.Set;
 import javafx.beans.binding.Bindings;
@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  * @author XDXD
  */
 public class ControlPanel {
-    Board board;
+    PlayBoard board;
     public double mouseX, mouseY;
     public int invertRange;
     public int snapCount;
@@ -54,7 +54,7 @@ public class ControlPanel {
     ComboBox<Color> colorSchemeBox; 
     ObservableList<Color> colors;
 
-    public ControlPanel(Board board) {
+    public ControlPanel(PlayBoard board) {
         invertRange = 0;
         this.board = board;
         initPanel();
@@ -73,7 +73,7 @@ public class ControlPanel {
         
         Slider invertSquareDimention = new Slider();
         invertSquareDimention.setMin(0);
-        invertSquareDimention.setMax(Math.min(Board.COLUMNS, Board.ROWS));
+        invertSquareDimention.setMax(Math.min(PlayBoard.COLUMNS, PlayBoard.ROWS));
         invertSquareDimention.setBlockIncrement(2);
         invertSquareDimention.setMajorTickUnit(2);
         invertSquareDimention.setShowTickMarks(true);
@@ -99,13 +99,13 @@ public class ControlPanel {
             schemesBox.getValue();
             board.setColorScheme(schemesBox.getValue());
             colors = null;
-            colors = FXCollections.observableArrayList(Board.colorScheme);
+            colors = FXCollections.observableArrayList(PlayBoard.colorScheme);
             colorSchemeBox.setItems(colors);
             
         });
         
         
-        //ObservableList<Color> colors = FXCollections.observableArrayList(Board.colorScheme);
+        //ObservableList<Color> colors = FXCollections.observableArrayList(PlayBoard.colorScheme);
 
         
         
@@ -113,7 +113,7 @@ public class ControlPanel {
         
         // Working with // Color scheme 
         colorSchemeBox  = new ComboBox();
-        colors = FXCollections.observableArrayList(Board.colorScheme);
+        colors = FXCollections.observableArrayList(PlayBoard.colorScheme);
         colorSchemeBox.setItems(colors);
         
         colorSchemeBox.setCellFactory(new Callback<ListView<Color>, ListCell<Color>>() {

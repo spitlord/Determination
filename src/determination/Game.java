@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
 public class Game extends Application {
     InvertibleBoard secondaryBoard;    
     ScrollPane scroll;
-    Board mainBoard;
+    PlayBoard mainBoard;
     GridPane grid;
     Scene scene;
     Stage primaryStage;
@@ -51,31 +51,41 @@ public class Game extends Application {
         this.primaryStage = primaryStage;
         
 
-        scroll  = new ScrollPane();
+      
        
         grid = new GridPane();
         grid.setHgap(0);
         grid.setVgap(0);
         
-        scroll.setContent(grid);
+   
        
-        int x = 0 ;
-        switch (x) {
+        ChooseBoard c = new ChooseBoard();
+       
+        int choise = c.message();
+        switch (choise) {
             case 1:
+                mainBoard = new PlayBoard(this);
+                scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
+                
+                 primaryStage.setScene(scene);
+                 primaryStage.show();
+                 ControlPanel controls = new ControlPanel(mainBoard);
+
                 break;
+            case 2:
+                scroll = new ScrollPane();
+                secondaryBoard = new InvertibleBoard(this);
+                scroll.setContent(grid);
+                scene = new Scene(scroll, 500, 500);
+                primaryStage.setScene(scene);
+                primaryStage.show(); 
+                break;
+        
             default:
         }
         
-        // mainBoard = new Board(this);
-       
-        secondaryBoard = new InvertibleBoard(this);
-       
-        scene = new Scene(scroll, grid.getPrefWidth(), grid.getPrefHeight());
-        primaryStage.setScene(scene);
-        primaryStage.show(); 
-        
-        
-       // ControlPanel controls = new ControlPanel(mainBoard);
+        // mainBoard = new PlayBoard(this);
+ 
         primaryStage.toFront();
         
        

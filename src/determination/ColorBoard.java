@@ -13,7 +13,7 @@ package determination;
 
 // rather have multiple different boards
 
-public class ColorBoard extends Board  {
+public class ColorBoard extends PlayBoard  {
     
     public ColorBoard(Game game) {
         super(game);

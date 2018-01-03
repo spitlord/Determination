@@ -26,6 +26,9 @@ public class InvertibleBoard {
     public static int HEIGHT = 25;
     int ja = 2;
     Game game;
+    public static ArrayList<Color> gradient;
+    Block[][] blocks;
+    
     
     
     public InvertibleBoard(Game game) {
@@ -43,13 +46,13 @@ public class InvertibleBoard {
 
     public void initBoard(Group g, boolean addLabel) {
         
-        ArrayList<Color> gradient = ColorSchemes.createGradient(g.size());
+        gradient = ColorSchemes.createGradient(g.size());
         game.getGrid().getChildren().clear();
         
        
         ArrayList<Element> elements = g.getElements();
         if (addLabel == true) {
-        for (int i = 0; i < elements.size(); i++) {  
+        for (int i = 0; i < elements.size(); i++) {
             Rectangle rectangle;
             rectangle = new Rectangle(WIDTH, HEIGHT);
             rectangle.setFill(gradient.get(i).desaturate().desaturate());
@@ -126,7 +129,8 @@ public class InvertibleBoard {
             //somethings wrong
             return -1;
         }
-    
+        
+     
 
 }
     
